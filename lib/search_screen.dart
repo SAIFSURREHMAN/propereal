@@ -2,26 +2,40 @@ import 'package:flutter/material.dart';
 import 'showing_result.dart';
 import 'text_constants.dart';
 
-class FirstScreen extends StatelessWidget {
-  const FirstScreen({super.key});
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Align(
-                alignment: Alignment.center,
-                child: PText(
-                  'To Buy, Rent Or Sell.',
-                  fontSize: 24,
-                  weight: FontWeight.bold,
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.keyboard_arrow_left,
+                      size: 50,
+                      color: Colors.grey.shade700,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: PText(
+                      'To Buy, Rent Or Sell.',
+                      fontSize: 24,
+                      weight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

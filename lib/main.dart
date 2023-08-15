@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'first_screen.dart';
+import 'package:propereal/heartc.dart';
+
+import 'package:provider/provider.dart';
+import 'search_screen.dart';
+import 'mainscreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => EligiblityScreenProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: FirstScreen(),
+      home: MainScreen(),
     );
   }
 }

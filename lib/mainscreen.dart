@@ -1,95 +1,117 @@
 import 'package:flutter/material.dart';
 import 'package:propereal/registration1.dart';
-import 'package:propereal/detail_page.dart';
+import 'package:propereal/search_screen.dart';
 import 'package:propereal/text_constants.dart';
 import 'package:provider/provider.dart';
-import 'heartc.dart';
+
 import 'ad_model.dart';
 import 'backend_data.dart';
+import 'detail_page.dart';
+import 'heartc.dart';
 
-class ShowResult extends StatelessWidget {
-  const ShowResult({super.key});
+class MainScreen extends StatefulWidget {
+  MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => EligiblityScreenProvider(),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.keyboard_arrow_left,
-                size: 50,
-                color: Colors.grey.shade700,
-              )),
-          title: RichText(
-            text: TextSpan(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
               children: [
-                WidgetSpan(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Icon(
-                      Icons.location_on_outlined,
-                      color: Color(0xff283e49),
-                      size: 24,
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  child: PageView.builder(
+                    itemCount: imagePaths.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPageIndex = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                        child: Image.asset(
+                          imagePaths[index],
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SafeArea(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SearchScreen(),
+                        ));
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        size: 50,
+                        color: const Color.fromARGB(255, 4, 4, 4),
+                      ),
                     ),
                   ),
                 ),
-                TextSpan(
-                    text: 'Karachi',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Color(0xff283e49),
-                    )),
+                SafeArea(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Registration(),
+                        ));
+                      },
+                      icon: Icon(
+                        Icons.supervised_user_circle,
+                        size: 50,
+                        color: const Color.fromARGB(255, 4, 4, 4),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Registration(),
-                ));
-              },
-              icon: Icon(
-                Icons.add,
-                size: 40,
-                color: Colors.black,
+            Align(
+              alignment: Alignment.topLeft,
+              child: PText(
+                'Showing All Result',
+                fontSize: 24,
+                weight: FontWeight.w600,
               ),
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              PText(
-                'Showing Result',
-                fontSize: 25,
-              ),
-              PText(
-                '100 properties found',
-                fontSize: 18,
-                color: Colors.grey,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: AdList.length,
-                    shrinkWrap: false,
-                    itemBuilder: (context, int index) {
-                      Ad ad = AdList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailPage(ad),
-                          ));
-                        },
+            ),
+            ListView.builder(
+              itemCount: AdList.length,
+              shrinkWrap: true,
+              physics:
+                  NeverScrollableScrollPhysics(), // Disable outer ListView scrolling
+              itemBuilder: (context, int index) {
+                Ad ad = AdList[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DetailPage(ad),
+                    ));
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
                         child: Container(
                           margin: EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
@@ -223,11 +245,13 @@ class ShowResult extends StatelessWidget {
                             ),
                           ),
                         ),
-                      );
-                    }),
-              ),
-            ],
-          ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
